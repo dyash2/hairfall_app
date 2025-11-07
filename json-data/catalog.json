@@ -1,0 +1,9 @@
+[
+  { "_id": "drug_a", "name": "Drug A", "type": "drug", "copy": "OTC Biotin + Zinc combo", "warnings": ["pregnancy", "lactation"] },
+  { "_id": "drug_b", "name": "Drug B", "type": "drug", "copy": "Topical Minoxidil 2%", "warnings": [] },
+  { "_id": "drug_c", "name": "Drug C", "type": "drug", "copy": "DHT-blocking supplement", "warnings": [] },
+  { "_id": "serum_a", "name": "Serum A", "type": "serum", "copy": "Peptide + Redensyl serum", "warnings": [] },
+  { "_id": "serum_b", "name": "Serum B", "type": "serum", "copy": "Caffeine + Niacinamide scalp tonic", "warnings": [] },
+  { "_id": "serum_c", "name": "Serum C", "type": "serum", "copy": "Anti-breakage serum", "warnings": [] },
+  { "_id": "life_l1", "name": "Lifestyle Pack L1", "type": "lifestyle", "copy": "Sleep hygiene + scalp massage routine", "warnings": [] }
+]

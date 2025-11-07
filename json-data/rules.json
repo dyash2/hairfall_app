@@ -1,0 +1,39 @@
+{
+  "_id": "v1",
+  "weights": {
+    "stress_level": { "low": {}, "moderate": { "stress": 1 }, "high": { "stress": 2 } },
+    "diet_quality": { "balanced": {}, "irregular": { "nutrition": 1 }, "deficient": { "nutrition": 2 } },
+    "screen_time": { "<3h": {}, "3-6h": { "sleep_screen": 1 }, ">6h": { "sleep_screen": 2 } },
+    "age_group": { "18-24": {}, "25-34": { "androgenic": 1 }, "35-44": { "androgenic": 2 }, "45+": { "androgenic": 2 } },
+    "lifestyle_factor": {
+      "tight_hairstyles": { "traction": 2 },
+      "sleep_debt": { "sleep_screen": 2 },
+      "recent_illness": { "illness_recovery": 2 },
+      "postpartum": { "postpartum": 3 },
+      "intense_workouts": { "nutrition": 1 },
+      "chemical_treatments": { "overuse_chemicals": 2 }
+    }
+  },
+  "priority": ["postpartum", "traction", "illness_recovery", "overuse_chemicals", "androgenic", "stress", "nutrition", "sleep_screen"],
+  "mapping": {
+    "postpartum": ["drug_a", "serum_a", "life_l1"],
+    "traction": ["serum_b", "life_l1"],
+    "illness_recovery": ["drug_a", "serum_a"],
+    "overuse_chemicals": ["serum_c", "life_l1"],
+    "androgenic": ["drug_c", "serum_b"],
+    "stress": ["drug_b", "life_l1"],
+    "nutrition": ["drug_a", "serum_b"],
+    "sleep_screen": ["serum_a", "life_l1"]
+  },
+  "rationale": {
+    "postpartum": "support postpartum shedding with gentle actives and routine",
+    "traction": "reduce tension and stimulate scalp circulation",
+    "illness_recovery": "replenish deficits and support regrowth",
+    "overuse_chemicals": "repair barrier and minimize breakage",
+    "androgenic": "counter DHT pathways and energize follicles",
+    "stress": "address stress-linked shedding with topical support",
+    "nutrition": "bridge micronutrient gaps and energize roots",
+    "sleep_screen": "improve sleep quality and nightly scalp care"
+  },
+  "active": true
+}

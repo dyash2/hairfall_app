@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "300016005231",
+    "project_id": "hairfall-quiz",
+    "storage_bucket": "hairfall-quiz.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300016005231:android:ea07b4d94af5bf20c11d9a",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBjUJ00NSk8vixLHcqO4rNJtwKy5KH9iI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

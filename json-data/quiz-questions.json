@@ -1,0 +1,61 @@
+[
+  {
+    "_id": "stress_level",
+    "title": "How stressed have you felt in the last 2 weeks?",
+    "options": [
+      { "key": "low", "label": "Low" },
+      { "key": "moderate", "label": "Moderate" },
+      { "key": "high", "label": "High" }
+    ],
+    "order": 1,
+    "active": true
+  },
+  {
+    "_id": "diet_quality",
+    "title": "How would you rate your overall diet?",
+    "options": [
+      { "key": "balanced", "label": "Balanced" },
+      { "key": "irregular", "label": "Irregular" },
+      { "key": "deficient", "label": "Deficient" }
+    ],
+    "order": 2,
+    "active": true
+  },
+  {
+    "_id": "screen_time",
+    "title": "Average screen time per day?",
+    "options": [
+      { "key": "<3h", "label": "<3h" },
+      { "key": "3-6h", "label": "3–6h" },
+      { "key": ">6h", "label": ">6h" }
+    ],
+    "order": 3,
+    "active": true
+  },
+  {
+    "_id": "age_group",
+    "title": "Your age bracket?",
+    "options": [
+      { "key": "18-24", "label": "18–24" },
+      { "key": "25-34", "label": "25–34" },
+      { "key": "35-44", "label": "35–44" },
+      { "key": "45+", "label": "45+" }
+    ],
+    "order": 4,
+    "active": true
+  },
+  {
+    "_id": "lifestyle_factor",
+    "title": "Which best describes your routine?",
+    "options": [
+      { "key": "tight_hairstyles", "label": "Tight Hairstyles" },
+      { "key": "sleep_debt", "label": "Sleep Debt" },
+      { "key": "recent_illness", "label": "Recent Illness" },
+      { "key": "postpartum", "label": "Postpartum (≤1yr)" },
+      { "key": "intense_workouts", "label": "Intense Workouts" },
+      { "key": "chemical_treatments", "label": "Chemical Treatments" }
+    ],
+    "order": 5,
+    "active": true
+  }
+]

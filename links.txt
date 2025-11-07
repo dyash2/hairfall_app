@@ -1,0 +1,14 @@
+mongodb+srv://appuser:<db_password>@cluster0.fbxe5bc.mongodb.net/?appName=Cluster0
+
+mongodb+srv://appuser:yash123@cluster0.fbxe5bc.mongodb.net/?appName=Cluster0
+
+
+3. Add Your Database Name At the End
+
+Right now your URL does not point to any database.
+You must add one (example → quizapp):
+
+mongodb+srv://appuser:yash123@cluster0.fbxe5bc.mongodb.net/quizapp?appName=Cluster0
+
+
+const MONGO_URI = "mongodb+srv://appuser:yash123@cluster0.fbxe5bc.mongodb.net/quizapp?appName=Cluster0";
