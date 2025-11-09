@@ -16,5 +16,5 @@ const QuizQuestionSchema = new mongoose.Schema({
 export const QuizQuestion = mongoose.model(
     "QuizQuestion",
     QuizQuestionSchema,
-    "quiz_questions" // Important fix
+    "quiz_questions" 
 );

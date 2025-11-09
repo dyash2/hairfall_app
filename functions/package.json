@@ -10,7 +10,9 @@
     "data:destroy": "ts-node --project tsconfig.seeder.json -d src/seed/seeder.ts",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "dev": "ts-node --transpile-only src/index.ts"
+
   },
   "engines": {
     "node": "18"

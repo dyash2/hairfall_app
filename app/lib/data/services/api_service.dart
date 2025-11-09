@@ -44,19 +44,40 @@ class ApiService {
   }
 
   static Future<List<String>> submitAnswers(Map<String, String> answers) async {
-    final token = await FirebaseAuth.instance.currentUser!.getIdToken();
+    final token = await FirebaseAuth.instance.currentUser?.getIdToken();
+
+    final url = Uri.parse(ApiEndpoints.recommend);
+
+    final body = jsonEncode({"answers": answers});
+
+    log("SENDING REQUEST TO /recommend");
+    log("URL: $url");
+    log("HEADERS:");
+    print({
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    log("BODY:");
+    log(body);
+    log("----------------------------------------------------");
+
     final response = await http.post(
-      Uri.parse(ApiEndpoints.recommend),
+      url,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode({"answers": answers, "rules_version": "v1"}),
+      body: body,
     );
+
+    log("RESPONSE RECEIVED");
+    log("STATUS CODE: ${response.statusCode}");
+    log("RESPONSE BODY: ${response.body}");
+    log("----------------------------------------------------");
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return List<String>.from(data);
+      return List<String>.from(data["products"]);
     } else {
       throw Exception("Error: ${response.body}");
     }

@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: QuizScreen(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -38,3 +38,55 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+// import 'package:flutter/material.dart';
+// import 'dart:io';
+
+// void main() {
+//   runApp(MaterialApp(
+//     home: MyApiScreen(),
+//   ));
+// }
+
+// class MyApiScreen extends StatefulWidget {
+//   @override
+//   _MyApiScreenState createState() => _MyApiScreenState();
+// }
+
+// class _MyApiScreenState extends State<MyApiScreen> {
+//   String result = "No data yet";
+
+//   void callApi() async {
+//     var client = HttpClient();
+//     var request = await client.getUrl(Uri.parse("http://192.168.0.105:5001/hairfall-quiz/asia-south1/api/quiz"));
+//     var response = await request.close();
+
+//     response.transform(SystemEncoding().decoder).listen((data) {
+//        print("API Response: $data");
+//       setState(() {
+//         result = data; // Update UI with API data
+//       });
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text("HTTP Request without package")),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Text(result), // Display result here
+//             SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: callApi,
+//               child: Text("Call API"),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

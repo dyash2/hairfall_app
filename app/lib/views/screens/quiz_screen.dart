@@ -1,7 +1,12 @@
 import 'dart:developer';
-
+import 'dart:ui';
+import 'package:app/core/themes/app_colors.dart';
+import 'package:app/core/utils/gradient_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/providers/quiz_provider.dart';
+import 'package:app/views/widgets/appbar_widget.dart';
 import 'package:app/views/widgets/custom_button.dart';
+import 'package:app/views/widgets/option_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,22 +23,20 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   late PageController _pageController;
 
-@override
-void initState() {
-  super.initState();
-  _pageController = PageController();
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
 
-  Future.microtask(() {
-    final user = FirebaseAuth.instance.currentUser;
-    log("🔐 Logged in as: ${user?.uid}");
+    Future.microtask(() {
+      final user = FirebaseAuth.instance.currentUser;
+      log("Logged in as: ${user?.uid}");
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("✅ Logged in anonymously")),
-    );
+      SnackbarUtils.showSuccess(context, "Logged in anonymously");
 
-    Provider.of<QuizProvider>(context, listen: false).fetchQuestions();
-  });
-}
+      Provider.of<QuizProvider>(context, listen: false).fetchQuestions();
+    });
+  }
 
   @override
   void dispose() {
@@ -44,183 +47,164 @@ void initState() {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Hairfall Questionnaire")),
-      body: Consumer<QuizProvider>(
-        builder: (context, provider, _) {
-          if (provider.questions.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      extendBodyBehindAppBar: true,
+      appBar: const TransparentAppBar(
+        title: "Hairfall Quiz",
+        showLeading: false,
+      ),
+      body: Container(
+        decoration: GradientUtils.defaultBoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Consumer<QuizProvider>(
+          builder: (context, provider, _) {
+            if (provider.questions.isEmpty) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              );
+            }
 
-          return Column(
-            children: [
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: provider.questions.length,
-                  onPageChanged: (page) => provider.index = page,
-                  itemBuilder: (context, index) {
-                    final question = provider.questions[index];
-                    return SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Q${index + 1}. ${question.title}",
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          ...question.options.map((opt) {
-                            return GestureDetector(
-                              onTap: () =>
-                                  provider.pickOption(question.id, opt.key),
-                              child: Row(
+            return Column(
+              children: [
+                const SizedBox(height: 100),
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: provider.questions.length,
+                    onPageChanged: (page) => provider.index = page,
+                    itemBuilder: (context, index) {
+                      final question = provider.questions[index];
+
+                      return SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(18),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: AppColors.glassWhite,
+                                borderRadius: BorderRadius.circular(18),
+                                border: Border.all(
+                                  color: AppColors.glassWhiteBorder,
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Radio<String>(
-                                    value: opt.key,
-                                    groupValue: provider.selected[question.id],
-                                    onChanged: (val) =>
-                                        provider.pickOption(question.id, val!),
+                                  Center(
+                                    child: Text(
+                                      "Q${provider.index + 1}. ${question.title}",
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    opt.label,
-                                    style: const TextStyle(fontSize: 18),
+                                  const SizedBox(height: 25),
+
+                                  ...question.options.map((opt) {
+                                    return OptionTile(
+                                      label: opt.label,
+                                      value: opt.key,
+                                      groupValue:
+                                          provider.selected[question.id],
+                                      onTap: () => provider.pickOption(
+                                        question.id,
+                                        opt.key,
+                                      ),
+                                    );
+                                  }),
+
+                                  Center(
+                                    child: SmoothPageIndicator(
+                                      controller: _pageController,
+                                      count: provider.questions.length,
+                                      effect: ExpandingDotsEffect(
+                                        activeDotColor: Colors.white,
+                                        dotColor: Colors.white.withOpacity(0.4),
+                                        dotHeight: 10,
+                                        dotWidth: 10,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 25),
+
+                                  Row(
+                                    children: [
+                                      if (provider.index > 0)
+                                        Expanded(
+                                          child: CustomButton(
+                                            text: "Back",
+                                            onPressed: () {
+                                              _pageController.previousPage(
+                                                duration: const Duration(
+                                                  milliseconds: 300,
+                                                ),
+                                                curve: Curves.easeInOut,
+                                              );
+                                              provider.back();
+                                            },
+                                          ),
+                                        ),
+                                      if (provider.index > 0)
+                                        const SizedBox(width: 12),
+                                      Expanded(
+                                        child: CustomButton(
+                                          text:
+                                              provider.index ==
+                                                  provider.questions.length - 1
+                                              ? "Submit"
+                                              : "Next",
+                                          onPressed:
+                                              provider.selected[question.id] ==
+                                                  null
+                                              ? null
+                                              : () {
+                                                  if (provider.index ==
+                                                      provider
+                                                              .questions
+                                                              .length -
+                                                          1) {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            const ReviewScreen(),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    _pageController.nextPage(
+                                                      duration: const Duration(
+                                                        milliseconds: 300,
+                                                      ),
+                                                      curve: Curves.easeInOut,
+                                                    );
+                                                    provider.next();
+                                                  }
+                                                },
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            );
-                          }).toList(),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: SmoothPageIndicator(
-                  controller: _pageController,
-                  count: provider.questions.length,
-                  effect: ExpandingDotsEffect(
-                    activeDotColor: Colors.red,
-                    dotColor: Colors.red.withOpacity(0.5),
-                    dotHeight: 12,
-                    dotWidth: 12,
-                    spacing: 5,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    if (provider.index > 0)
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: () {
-                            _pageController.previousPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                            provider.back();
-                          },
-                          text: "← Back",
-                        ),
-                      ),
-                    if (provider.index > 0) const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomButton(
-                        onPressed:
-                            provider.selected[provider
-                                    .questions[provider.index]
-                                    .id] ==
-                                null
-                            ? null
-                            : () {
-                                if (provider.index ==
-                                    provider.questions.length - 1) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const ReviewScreen(),
-                                    ),
-                                  );
-                                } else {
-                                  _pageController.nextPage(
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                  provider.next();
-                                }
-                              },
-                        text: provider.index == provider.questions.length - 1
-                            ? "Submit"
-                            : "Next →",
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.blue.shade200),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: const [
-                            Icon(Icons.info_outline, color: Colors.blue),
-                            SizedBox(width: 8),
-                            Text(
-                              "Instructions",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
                             ),
-                          ],
+                          ),
                         ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          "• This quiz has 5 questions to help estimate the primary cause of hair fall.",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 6),
-                        const Text(
-                          "• Select the option that best describes your habits or condition.",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 6),
-                        const Text(
-                          "• Your answers are not medical advice but provide personalized recommendations.",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ),
-              ),
-              SizedBox(height: 80),
-            ],
-          );
-        },
+                const SizedBox(height: 30),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

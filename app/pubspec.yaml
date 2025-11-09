@@ -40,6 +40,8 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   firebase_core: ^4.2.1
   firebase_auth: ^6.1.2
+  awesome_snackbar_content: ^0.1.6
+  snackify: ^1.2.4
 
 dev_dependencies:
   flutter_test:
